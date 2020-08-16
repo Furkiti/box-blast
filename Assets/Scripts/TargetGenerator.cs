@@ -5,29 +5,34 @@ using UnityEngine;
 
 public class TargetGenerator : MonoBehaviour
 {
+    //Targets properties
     [SerializeField]
-    private GameObject targetprefab;
+    private GameObject targetprefabsmall;
+    [SerializeField]
+    private GameObject targetprefabmedium;
+    [SerializeField]
+    private GameObject targetprefablarge;
+
     [SerializeField]
     private GameObject targetSpawnPos;
-
     private ObjectPool targetPool;
-    private int poolSize = 1;
+    private int poolSize = 10;
+    
     private float[] posArray = {-2,-0.69f,0.62f,1.95f};
 
     void Start()
     {
-        targetPool = new ObjectPool(targetprefab);
+        targetPool = new ObjectPool(targetprefabsmall);
         targetPool.fillpool(poolSize);
 
         StartCoroutine(createobj());
-
     }
 
     IEnumerator createobj()
     {
         while (true)
         {
-            var wait = new WaitForSeconds(1f);
+            var wait = new WaitForSeconds(2f);
 
             Vector3 pos = setpos();
 
