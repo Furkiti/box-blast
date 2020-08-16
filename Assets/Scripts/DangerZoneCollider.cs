@@ -4,13 +4,14 @@ using UnityEngine;
 
 public class DangerZoneCollider : MonoBehaviour
 {
-   
-
-    private void OnTriggerEnter(Collider other)
+    
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(other.gameObject.tag == "target")
+        Debug.Log("collide");
+        if (collision.gameObject.tag == "target")
         {
-            Destroy(other.gameObject);
+            Destroy(collision.gameObject);
         }
     }
+
 }
