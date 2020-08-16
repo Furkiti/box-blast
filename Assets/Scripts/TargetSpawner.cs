@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class TargetGenerator : MonoBehaviour
+public class TargetSpawner : MonoBehaviour
 {
     //Targets properties
     [SerializeField]
@@ -22,17 +22,23 @@ public class TargetGenerator : MonoBehaviour
 
     void Start()
     {
+        
         targetPool = new ObjectPool(targetprefabsmall);
         targetPool.fillpool(poolSize);
-
         StartCoroutine(createobj());
+
+    }
+
+    private void FixedUpdate()
+    {
+        
     }
 
     IEnumerator createobj()
     {
         while (true)
         {
-            var wait = new WaitForSeconds(2f);
+            var wait = new WaitForSeconds(3f);
 
             Vector3 pos = setpos();
 
@@ -41,6 +47,8 @@ public class TargetGenerator : MonoBehaviour
 
             yield return wait;
         }
+           
+        
         
     }
 

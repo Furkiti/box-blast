@@ -6,14 +6,14 @@ using UnityEngine.UI;
 
 public class Target : MonoBehaviour
 {
-    TextMesh targetValue;
-    private float size;
+   // TextMesh healthText;
+    private int health = 100;
     private String color;
-    private int health;
+    
 
     private void Update()
     {
-        targetValue = GetComponentInChildren<TextMesh>();
-        targetValue.text = "9";
+        //healthText = GetComponentInChildren<TextMesh>();
+        //healthText.text = health.ToString();
     }
 }
