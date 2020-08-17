@@ -4,20 +4,13 @@ using UnityEngine;
 
 public class InputController : MonoBehaviour
 {
-    public GameObject ball;
-    public GameObject player;
-    public GameObject spawnPos;
-
-  
+    public BulletSpawner bulletSpawner;
          
     void Update()
     {
         if (Input.GetMouseButtonDown(0))
         {
-            Debug.Log("test");
-            
-            
-            Instantiate(ball, spawnPos.transform.position, spawnPos.transform.rotation);
+            bulletSpawner.preparebullet();
         }
     }
 }

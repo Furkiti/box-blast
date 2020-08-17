@@ -18,14 +18,14 @@ public class BulletSpawner: MonoBehaviour
 
 
 
-    private void preparebullet()
+    public void preparebullet()
     {
         bulletPool = new ObjectPool(bulletprefab);
         bulletPool.fillpool(poolSize);
-        StartCoroutine(createobj());
+        StartCoroutine(createbullets());
     }
 
-    IEnumerator createobj()
+    IEnumerator createbullets()
     {
        
             Vector3 pos = setpos();
@@ -41,22 +41,9 @@ public class BulletSpawner: MonoBehaviour
     private Vector3 setpos()
     {
         int indexposx = UnityEngine.Random.Range(0, posArray.Length);
-
-
-
         return new Vector3(posArray[indexposx], bulletSpawnPos.transform.position.y, bulletSpawnPos.transform.position.z);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (Input.GetMouseButtonDown(0))
-        {
-            preparebullet();
-           
-        }
-        
-    }
 
     private void setvelocity(GameObject tempobj)
     {
