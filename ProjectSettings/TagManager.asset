@@ -7,8 +7,9 @@ TagManager:
   - target
   - wall
   - bullet
-  - dangerzonebullets
-  - dangerzonetargets
+  - bulletcollider
+  - cannon
+  - boxcollider
   layers:
   - Default
   - TransparentFX
@@ -19,10 +20,10 @@ TagManager:
   - 
   - 
   - Background Image
-  - 
-  - 
-  - 
-  - 
+  - Bullet Layer
+  - Target Layer
+  - Wall Layer
+  - Cannon Layer
   - 
   - 
   - 

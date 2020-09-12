@@ -2,52 +2,124 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Main.BaseObject;
+using UnityEngine.UI;
+using Object = System.Object;
 
-public class BulletSpawner: MonoBehaviour
+public class BulletSpawner: BaseObject
 {
-    [SerializeField]
-    private GameObject bulletprefab;
+    //touching area
+    //Rect touchableArea = new Rect(0f,Screen.height,Screen.width,Screen)
+    Rect touchableArea = new Rect(0, 300, Screen.width, Screen.height);  
+    //Rect topRight = new Rect(Screen.width / 2, Screen.height / 2, Screen.width / 2, Screen.height / 2);
 
-    [SerializeField]
-    private GameObject bulletSpawnPos;
+    [SerializeField] private GameObject bulletPrefab;
+    [SerializeField] private GameObject cannonPos;
+    [SerializeField] private float impulseForce = 100f;
+
+    //Object Pooling
     private ObjectPool bulletPool;
-    private int poolSize = 10;
-    private BulletSpawnPosition bulletspawnpos;
+    private int poolSize = 150;
 
-    private float[] posArray = { -2, -0.69f, 0.62f, 1.95f };
+    //Spawn Rate
+    private float nextSpawnTime;
+    [SerializeField] private float delay = 1f;
 
+    //Angle Degrees
+    private float minRot = -0.64f;
+    private float maxRot = 0.64f;
+
+    private void Start()
+    {
+        bulletPool = new ObjectPool(bulletPrefab);
+        bulletPool.fillpool(poolSize);
+    }
 
 
     public void preparebullet()
     {
-        bulletPool = new ObjectPool(bulletprefab);
-        bulletPool.fillpool(poolSize);
         StartCoroutine(createbullets());
+    }
+
+    private void FixedUpdate()
+    {
+        getPcInput();
+        getMobileInput();
+    }
+
+   
+
+    private void getPcInput()
+    {
+        if (Input.GetMouseButton(0))
+        {
+            //Debug.Log("screen height" + Screen.height);
+            //Debug.Log("screen width" + Screen.width);
+            Vector2 mousePos = Input.mousePosition;
+            
+            if (touchableArea.Contains(mousePos))
+            {
+                if (readyToSpawnBullet)
+                {
+                    preparebullet();
+
+                }
+            }
+            
+        }
+    }
+
+    private void getMobileInput()
+    {
+        if (Input.touchCount > 0)
+        {
+            Vector2 touchPos = Input.GetTouch(0).position;
+
+            if (touchableArea.Contains(touchPos))
+            {
+                if (touchableArea.Contains(touchPos))
+                    
+                if (readyToSpawnBullet)
+                {
+                    preparebullet();
+                }
+            }
+           
+           
+            
+        }
+    }
+
+    public bool readyToSpawnBullet
+    {
+        get
+        {
+            return Time.time >= nextSpawnTime;
+        }
     }
 
     IEnumerator createbullets()
     {
-       
-            Vector3 pos = setpos();
-
-            GameObject tempobj = bulletPool.popfrompool();
-            tempobj.transform.position = pos;
-            setvelocity(tempobj);
-
-            yield return null;
-            
+        nextSpawnTime = Time.time + delay;
+        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector3 mouseDir = mousePos - cannonPos.gameObject.transform.position;
+        mouseDir.z = 0.0f;
+        mouseDir = mouseDir.normalized;
+        StartCoroutine(launchingBalls(mouseDir));
+        
+        yield return null;       
     }
 
-    private Vector3 setpos()
+    IEnumerator launchingBalls(Vector3 mouseDir)
     {
-        int indexposx = UnityEngine.Random.Range(0, posArray.Length);
-        return new Vector3(posArray[indexposx], bulletSpawnPos.transform.position.y, bulletSpawnPos.transform.position.z);
+        GameObject tempobj = bulletPool.PopFromPool();
+        tempobj.transform.position = cannonPos.gameObject.transform.position;
+        tempobj.GetComponent<Rigidbody2D>().AddForce(mouseDir * impulseForce, ForceMode2D.Impulse);
+
+        yield return new WaitForSeconds(1f);
     }
 
+    
 
-    private void setvelocity(GameObject tempobj)
-    {
-
-        tempobj.GetComponent<Rigidbody2D>().velocity = Vector2.up;
-    }
+ 
 }
